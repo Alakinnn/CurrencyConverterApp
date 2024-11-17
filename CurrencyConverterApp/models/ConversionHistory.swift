@@ -15,4 +15,11 @@ struct ConversionHistory: Identifiable, Codable {
   let toAmount: Double
   let exchangeRate: Double
   let date: Date
+  
+  var formattedDate: String {
+    let formatter = DateFormatter()
+    formatter.dateStyle = .medium
+    formatter.timeStyle = .short
+    return formatter.string(from: date)
+  }
 }
