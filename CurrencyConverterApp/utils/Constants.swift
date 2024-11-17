@@ -12,7 +12,7 @@ enum Constants {
 //  IT IS IMPLEMENTED THIS WAY
 //  example url: "https://v6.exchangerate-api.com/v6/YOUR-API-KEY/pair/EUR/GBP/AMOUNT"
   
-    static let apiBaseURL = "https://v6.exchangerate-api.com/v6/c960cb3263b83d121ad8ccb5/pair/"
+    static let apiBaseURL = "https://v6.exchangerate-api.com/v6/c960cb3263b83d121ad8ccb5"
     static let historyKey = "conversionHistory"
     static let maxHistoryItems = 100
     
