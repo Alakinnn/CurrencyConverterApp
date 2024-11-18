@@ -8,14 +8,28 @@
 import SwiftUI
 
 struct ContentView: View {
+  @State private var ccVm = CurrencyConverterViewModel()
+  @Bindable private var appState = AppState.shared
+  
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+      TabView(selection: $appState.selectedTab) {
+        NavigationStack {
+          CurrencyConverterView()
         }
-        .padding()
+        .tag(0)
+        .tabItem {
+        Label("Convert", systemImage: "arrow.left.arrow.right")
+        }
+        
+        NavigationStack {
+          HistoryView()
+            .navigationTitle("History")
+        }
+        .tag(1)
+        .tabItem {
+          Label("History", systemImage: "clock")
+        }
+      }
     }
 }
 
