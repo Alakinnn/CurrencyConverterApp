@@ -59,7 +59,7 @@ struct CurrencyConverterView: View {
         }
         .padding()
       }
-      .frame(height: UIScreen.main.bounds.height * 0.4)
+      .ignoresSafeArea()
       
       numberPad
         .padding()
