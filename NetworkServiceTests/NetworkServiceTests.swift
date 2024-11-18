@@ -72,7 +72,7 @@ final class NetworkServiceTests: XCTestCase {
         )
         
         // When
-        let rate = try await sut.fetchExchangeRate(from: .EUR, to: .GBP)
+        let rate = try await sut.fetchExchangeRate(from: .eur, to: .gbp)
         
         // Then
         XCTAssertEqual(rate, expectedRate)
@@ -96,7 +96,7 @@ final class NetworkServiceTests: XCTestCase {
         
         // When/Then
         do {
-          _ = try await sut.fetchExchangeRate(from: .eur, to: .gdp)
+          _ = try await sut.fetchExchangeRate(from: .eur, to: .gbp)
             XCTFail("Expected error wasn't thrown")
         } catch let error as NetworkService.NetworkError {
             XCTAssertEqual(error, .unknownCurrencyCode)
