@@ -10,7 +10,7 @@ import Foundation
 enum Currency: String, CaseIterable, Codable {
   case usd = "USD"
   case eur = "EUR"
-  case gdp = "GDP"
+  case gbp = "gbp"
   case jpy = "JPY"
   
   var symbol: String {
