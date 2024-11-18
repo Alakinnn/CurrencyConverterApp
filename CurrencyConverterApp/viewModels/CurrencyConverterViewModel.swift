@@ -92,4 +92,15 @@ final class CurrencyConverterViewModel {
       isLoading = false
     }
   }
+  
+  @MainActor 
+  func swapCurrencies() {
+    let tempCurrency = fromCurrency
+    fromCurrency = toCurrency
+    toCurrency = tempCurrency
+    
+    if !fromAmount.isEmpty {
+      convert()
+    }
+  }
 }
