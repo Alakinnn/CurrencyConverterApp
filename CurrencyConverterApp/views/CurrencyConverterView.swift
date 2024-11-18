@@ -116,7 +116,3 @@ struct CurrencyConverterView: View {
     }
   }
 }
-
-#Preview {
-  CurrencyConverterView()
-}
