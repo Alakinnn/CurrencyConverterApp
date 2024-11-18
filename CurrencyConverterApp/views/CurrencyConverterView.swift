@@ -47,6 +47,7 @@ struct CurrencyConverterView: View {
           )
           
           Button {
+            vm.convert()
           } label: {
             Text("Convert")
               .font(.headline)
