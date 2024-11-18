@@ -9,7 +9,7 @@ import Foundation
 import Observation
 
 @Observable final class AppState {
-  var selectedApp: Int = 0
+  var selectedTab: Int = 0
   var conversions: [ConversionHistory] = []
   
   static let shared = AppState()
