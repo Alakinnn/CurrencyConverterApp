@@ -7,9 +7,18 @@
 
 import Foundation
 
+// TODO: Change class name to ExchangeRateResponse
 struct ExchangeRate: Codable {
-  let success: Bool
-  let timestamp: TimeInterval
-  let base: String
-  let rates: [String: Double]
+  let result: String
+  let conversionRate: Double?
+  let errorType: String?
+  let baseCode: String?
+  let targetCode: String?
+  let conversionResult: Double?
+  let documentation: String?
+  let termsOfUse: String?
+  let timeLastUpdateUnix: TimeInterval?
+  let timeLastUpdateUtc: String?
+  let timeNextUpdateUnix: TimeInterval?
+  let timeNextUpdateUtc: String?
 }
