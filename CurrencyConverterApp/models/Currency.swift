@@ -17,7 +17,7 @@ enum Currency: String, CaseIterable, Codable {
     switch self {
     case .usd: return "$"
     case .eur: return "€"
-    case .gdp: return "£"
+    case .gbp: return "£"
     case .jpy: return "¥"
     }
   }
