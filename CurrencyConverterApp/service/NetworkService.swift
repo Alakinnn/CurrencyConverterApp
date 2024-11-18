@@ -8,7 +8,7 @@
 import Foundation
 
 actor NetworkService {
-  enum NetworkError: LocalizedError {
+  enum NetworkError: LocalizedError, Equatable {
     case invalidURL
     case invalidResponse
     case apiError(String)
