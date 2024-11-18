@@ -7,7 +7,7 @@
 
 import Foundation
 
-actor PersistenceService {
+class PersistenceService {
   private let userDefaults: UserDefaults
   
   init(userDefaults: UserDefaults = .standard) {
