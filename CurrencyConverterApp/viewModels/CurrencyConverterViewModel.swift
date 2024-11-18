@@ -22,10 +22,30 @@ final class CurrencyConverterViewModel {
   private let persistenceService: PersistenceService
   
   init(
-  networkService: NetworkService = NetworkService(),
-  persistenceService: PersistenceService = PersistenceService()
+    networkService: NetworkService = NetworkService(),
+    persistenceService: PersistenceService = PersistenceService()
   ) {
     self.networkService = NetworkService()
     self.persistenceService = PersistenceService()
+  }
+  
+  func numberPressed(_ number: Int) {
+    if fromAmount == "0" {
+      fromAmount = "\(number)"
+    } else {
+      fromAmount += "\(number)"
+    }
+  }
+  
+  func decimalPressed() {
+    if !fromAmount.contains(".") {
+      fromAmount += "."
+    }
+  }
+  
+  func clearPressed() {
+    fromAmount = ""
+    toAmount = ""
+    currentRate = nil
   }
 }
