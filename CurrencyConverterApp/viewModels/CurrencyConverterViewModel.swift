@@ -25,8 +25,8 @@ final class CurrencyConverterViewModel {
     networkService: NetworkService = NetworkService(),
     persistenceService: PersistenceService = PersistenceService()
   ) {
-    self.networkService = NetworkService()
-    self.persistenceService = PersistenceService()
+    self.networkService = networkService
+    self.persistenceService = persistenceService
   }
   
   func numberPressed(_ number: Int) {

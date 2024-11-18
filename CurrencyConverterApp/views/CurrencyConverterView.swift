@@ -7,10 +7,7 @@
 
 import SwiftUI
 struct CurrencyConverterView: View {
-  @State private var fromAmount = ""
-  @State private var toAmount = ""
-  @State private var fromCurrency = Currency.usd
-  @State private var toCurrency = Currency.eur
+  @State private var vm = CurrencyConverterViewModel()
   
   var body: some View {
     VStack(spacing: 0) {
@@ -23,26 +20,29 @@ struct CurrencyConverterView: View {
         
         VStack(spacing: 20) {
           currencySection(
-            amount: $fromAmount,
-            currency: $fromCurrency
+            amount: vm.fromAmount,
+            currency: $vm.fromCurrency
           )
           
           HStack {
             Button {
+              vm.swapCurrencies()
             } label: {
               Image(systemName: "arrow.up.arrow.down")
                 .font(.title2)
                 .foregroundColor(.white)
             }
             
-            Text("1 USD = 0.8525 EUR")  // TODO: Remove hardcoded block
-              .font(.caption)
-              .foregroundColor(.white)
+            if let rate = vm.currentRate {
+              Text("1 \(vm.fromCurrency.rawValue) = \(String(format: "%.4f", rate)) \(vm.toCurrency.rawValue)")
+                .font(.caption)
+                .foregroundColor(.white)
+            }
           }
           
           currencySection(
-            amount: $toAmount,
-            currency: $toCurrency,
+            amount: vm.toAmount,
+            currency: $vm.toCurrency,
             isEditable: false
           )
           
@@ -67,7 +67,7 @@ struct CurrencyConverterView: View {
   }
   
   private func currencySection(
-    amount: Binding<String>,
+    amount: String,
     currency: Binding<Currency>,
     isEditable: Bool = true
   ) -> some View {
@@ -87,7 +87,7 @@ struct CurrencyConverterView: View {
         .foregroundColor(.white)
       }
       
-      Text(amount.wrappedValue.isEmpty ? "0" : amount.wrappedValue)
+      Text(amount.isEmpty ? "0" : amount)
         .font(.system(size: 40, weight: .medium))
         .foregroundColor(.white)
         .frame(maxWidth: .infinity, alignment: .trailing)
@@ -98,27 +98,20 @@ struct CurrencyConverterView: View {
     LazyVGrid(columns: Array(repeating: GridItem(), count: 3), spacing: Constants.NumberPad.spacing) {
       ForEach(1...9, id: \.self) { number in
         NumberButton(title: "\(number)") {
-          if fromAmount.count < 10 {
-            fromAmount += "\(number)"
-          }
+          vm.numberPressed(number)
         }
       }
       
       NumberButton(title: "C") {
-        fromAmount = ""
-        toAmount = ""
+        vm.clearPressed()
       }
       
       NumberButton(title: "0") {
-        if fromAmount.count < 10 {
-          fromAmount += "0"
-        }
+        vm.numberPressed(0)
       }
       
       NumberButton(title: ".") {
-        if !fromAmount.contains(".") {
-          fromAmount += fromAmount.isEmpty ? "0." : "."
-        }
+        vm.decimalPressed()
       }
     }
   }
