@@ -14,7 +14,7 @@ struct ContentView: View {
     var body: some View {
       TabView(selection: $appState.selectedTab) {
         NavigationStack {
-          CurrencyConverterView()
+          CurrencyConverterView(vm: ccVm)
         }
         .tag(0)
         .tabItem {

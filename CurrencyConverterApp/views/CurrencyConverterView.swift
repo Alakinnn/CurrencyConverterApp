@@ -7,7 +7,7 @@
 
 import SwiftUI
 struct CurrencyConverterView: View {
-  @State private var vm = CurrencyConverterViewModel()
+  @State var vm: CurrencyConverterViewModel
   
   var body: some View {
     VStack(spacing: 0) {
