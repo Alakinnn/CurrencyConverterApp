@@ -51,25 +51,29 @@ final class CurrencyConverterViewModel {
   
   @MainActor
   func convert() {
+    guard !isLoading else { return }
     guard let amount = Double(fromAmount) else {
       error = "Please enter a valid amount"
       return
     }
     
+    isLoading = true
+    error = nil
+    
     Task {
       do {
-        isLoading = true
-        error = nil
-        
+        // Fetch rate
         let rate = try await networkService.fetchExchangeRate(
           from: fromCurrency,
           to: toCurrency
         )
-        
+                
+        // Update UI with results
         currentRate = rate
         let convertedAmount = amount * rate
         toAmount = String(format: "%.2f", convertedAmount)
         
+        // Create and save conversion history
         let conversion = ConversionHistory(
           id: UUID(),
           fromCurrency: fromCurrency,
@@ -80,13 +84,12 @@ final class CurrencyConverterViewModel {
           date: Date()
         )
         
-        try persistenceService.saveConversion(conversion)
-        AppState.shared.conversions.insert(conversion, at: 0)
+        await AppState.shared.addConversion(conversion)
         
       } catch {
         self.error = error.localizedDescription
-        toAmount = ""
-        currentRate = nil
+        self.toAmount = ""
+        self.currentRate = nil
       }
       
       isLoading = false

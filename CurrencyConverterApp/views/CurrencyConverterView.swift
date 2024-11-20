@@ -21,7 +21,8 @@ struct CurrencyConverterView: View {
         VStack(spacing: 20) {
           currencySection(
             amount: vm.fromAmount,
-            currency: $vm.fromCurrency
+            currency: $vm.fromCurrency,
+            onCurrencyChange: { _ in vm.convert() }
           )
           
           HStack {
@@ -43,7 +44,8 @@ struct CurrencyConverterView: View {
           currencySection(
             amount: vm.toAmount,
             currency: $vm.toCurrency,
-            isEditable: false
+            isEditable: false,
+            onCurrencyChange: { _ in vm.convert() }
           )
           
           Button {
@@ -68,15 +70,17 @@ struct CurrencyConverterView: View {
   }
   
   private func currencySection(
-    amount: String,
-    currency: Binding<Currency>,
-    isEditable: Bool = true
+      amount: String,
+      currency: Binding<Currency>,
+      isEditable: Bool = true,
+      onCurrencyChange: @escaping (Currency) -> Void = { _ in }
   ) -> some View {
     VStack(alignment: .trailing, spacing: 8) {
       Menu {
         ForEach(Currency.allCases, id: \.self) { curr in
           Button(curr.rawValue) {
             currency.wrappedValue = curr
+            onCurrencyChange(curr)
           }
         }
       } label: {

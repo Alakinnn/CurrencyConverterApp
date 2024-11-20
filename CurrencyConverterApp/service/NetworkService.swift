@@ -33,12 +33,19 @@ actor NetworkService {
   }
   
   private let session: URLSession
+  private let cache: ExchangeRateCacheService
   
-  init(session: URLSession = .shared) {
+  init(session: URLSession = .shared, cache: ExchangeRateCacheService = ExchangeRateCacheService()) {
     self.session = session
+    self.cache = cache
   }
   
   func fetchExchangeRate(from: Currency, to: Currency) async throws -> Double {
+// Check cache first
+    if let cachedRate = cache.getRate(from: from, to: to) {
+      return cachedRate
+    }
+    
     let urlString = "\(Constants.apiBaseURL)/pair/\(from.rawValue)/\(to.rawValue)"
     
 //    Construcutre an URL object
@@ -53,7 +60,7 @@ actor NetworkService {
       throw NetworkError.invalidResponse
     }
     
-    let exchangeRate = try JSONDecoder().decode(ExchangeRate.self, from: data)
+    let exchangeRate = try JSONDecoder().decode(ExchangeRateResponse.self, from: data)
     
     // Handle error response
     if exchangeRate.result == "error" {
@@ -70,6 +77,8 @@ actor NetworkService {
           let rate = exchangeRate.conversionRate else {
       throw NetworkError.conversionError("Conversion rate not found")
     }
+    
+    cache.saveRate(from: from, to: to, rate: rate)
     
     return rate
   }
