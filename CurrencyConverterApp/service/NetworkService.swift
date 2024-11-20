@@ -12,9 +12,9 @@ actor NetworkService {
     case invalidURL
     case invalidResponse
     case apiError(String)
-    
     case unknownCurrencyCode
     case conversionError(String)
+    case noInternetConnection
     
     var errorDescription: String? {
       switch self {
@@ -28,6 +28,8 @@ actor NetworkService {
         return "Unknown currency code"
       case .conversionError(let message):
         return message
+      case .noInternetConnection:
+        return "No internet connection. Please check your network settings."
       }
     }
   }
@@ -41,45 +43,46 @@ actor NetworkService {
   }
   
   func fetchExchangeRate(from: Currency, to: Currency) async throws -> Double {
-// Check cache first
     if let cachedRate = cache.getRate(from: from, to: to) {
       return cachedRate
     }
     
     let urlString = "\(Constants.apiBaseURL)/pair/\(from.rawValue)/\(to.rawValue)"
-    
-//    Construcutre an URL object
     guard let url = URL(string: urlString) else {
       throw NetworkError.invalidURL
     }
     
-    let (data, response) = try await session.data(from: url)
-    
-    guard let httpResponse = response as? HTTPURLResponse,
-          (200...299).contains(httpResponse.statusCode) else {
-      throw NetworkError.invalidResponse
-    }
-    
-    let exchangeRate = try JSONDecoder().decode(ExchangeRateResponse.self, from: data)
-    
-    // Handle error response
-    if exchangeRate.result == "error" {
-      switch exchangeRate.errorType {
-      case "unknown-code":
-        throw NetworkError.unknownCurrencyCode
-      default:
-        throw NetworkError.apiError(exchangeRate.errorType ?? "Unknown error")
+    do {
+      let (data, response) = try await session.data(from: url)
+      
+      guard let httpResponse = response as? HTTPURLResponse,
+            (200...299).contains(httpResponse.statusCode) else {
+        throw NetworkError.invalidResponse
       }
+      
+      let exchangeRate = try JSONDecoder().decode(ExchangeRateResponse.self, from: data)
+      
+      if exchangeRate.result == "error" {
+        switch exchangeRate.errorType {
+        case "unknown-code":
+          throw NetworkError.unknownCurrencyCode
+        default:
+          throw NetworkError.apiError(exchangeRate.errorType ?? "Unknown error")
+        }
+      }
+      
+      guard exchangeRate.result == "success",
+            let rate = exchangeRate.conversionRate else {
+        throw NetworkError.conversionError("Conversion rate not found")
+      }
+      
+      cache.saveRate(from: from, to: to, rate: rate)
+      return rate
+      
+    } catch URLError.notConnectedToInternet {
+      throw NetworkError.noInternetConnection
+    } catch {
+      throw error
     }
-    
-    // Handle success response
-    guard exchangeRate.result == "success",
-          let rate = exchangeRate.conversionRate else {
-      throw NetworkError.conversionError("Conversion rate not found")
-    }
-    
-    cache.saveRate(from: from, to: to, rate: rate)
-    
-    return rate
   }
 }
