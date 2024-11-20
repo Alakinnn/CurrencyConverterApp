@@ -13,6 +13,21 @@ import Observation
   var conversions: [ConversionHistory] = []
   
   static let shared = AppState()
-//  TODO: Add a method to load persisted histories from disk to history
-  private init() {}
+
+  private init() {
+    loadPersistedHistory()
+  }
+    
+  private func loadPersistedHistory() {
+    Task {
+      do {
+        let persistedConversions = try PersistenceService().getHistory()
+        // Ensure UI updates happen on the main thread
+        await MainActor.run {
+          self.conversions = persistedConversions
+        }
+      } catch {
+        print("Failed to load conversion history: \(error.localizedDescription)")
+      }
+    }}
 }
