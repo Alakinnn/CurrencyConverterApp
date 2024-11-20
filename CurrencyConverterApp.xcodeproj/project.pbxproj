@@ -22,6 +22,7 @@
 		646461C72CEB208E005E157F /* NumberButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 646461C62CEB208E005E157F /* NumberButton.swift */; };
 		646461CA2CEB2B89005E157F /* CurrencyConverterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 646461C92CEB2B89005E157F /* CurrencyConverterViewModel.swift */; };
 		6486BD212CEDEDB7008C1A22 /* CachedRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6486BD202CEDEDB7008C1A22 /* CachedRate.swift */; };
+		6486BD232CEDEEF6008C1A22 /* ExchangeRateCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6486BD222CEDEEF6008C1A22 /* ExchangeRateCacheService.swift */; };
 		64D9B63E2CEA600B001E52BD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D9B63D2CEA600B001E52BD /* Constants.swift */; };
 		64D9B6402CEA6128001E52BD /* DoubleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D9B63F2CEA6128001E52BD /* DoubleExtensions.swift */; };
 		64D9B6422CEA6480001E52BD /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D9B6412CEA6480001E52BD /* NetworkService.swift */; };
@@ -63,6 +64,7 @@
 		646461C62CEB208E005E157F /* NumberButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberButton.swift; sourceTree = "<group>"; };
 		646461C92CEB2B89005E157F /* CurrencyConverterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConverterViewModel.swift; sourceTree = "<group>"; };
 		6486BD202CEDEDB7008C1A22 /* CachedRate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedRate.swift; sourceTree = "<group>"; };
+		6486BD222CEDEEF6008C1A22 /* ExchangeRateCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRateCacheService.swift; sourceTree = "<group>"; };
 		64D9B63D2CEA600B001E52BD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		64D9B63F2CEA6128001E52BD /* DoubleExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleExtensions.swift; sourceTree = "<group>"; };
 		64D9B6412CEA6480001E52BD /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
@@ -187,6 +189,7 @@
 			children = (
 				64D9B6412CEA6480001E52BD /* NetworkService.swift */,
 				646461BD2CEB1AC0005E157F /* PersistenceService.swift */,
+				6486BD222CEDEEF6008C1A22 /* ExchangeRateCacheService.swift */,
 			);
 			path = service;
 			sourceTree = "<group>";
@@ -343,6 +346,7 @@
 				646461BE2CEB1AC0005E157F /* PersistenceService.swift in Sources */,
 				64D9B6402CEA6128001E52BD /* DoubleExtensions.swift in Sources */,
 				64D9B63E2CEA600B001E52BD /* Constants.swift in Sources */,
+				6486BD232CEDEEF6008C1A22 /* ExchangeRateCacheService.swift in Sources */,
 				644263F72CEA4AEE00041E0C /* ContentView.swift in Sources */,
 				644263F52CEA4AEE00041E0C /* CurrencyConverterAppApp.swift in Sources */,
 			);
