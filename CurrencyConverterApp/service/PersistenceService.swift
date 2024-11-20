@@ -7,14 +7,14 @@
 
 import Foundation
 
-class PersistenceService {
+actor PersistenceService {
   private let userDefaults: UserDefaults
   
   init(userDefaults: UserDefaults = .standard) {
     self.userDefaults = userDefaults
   }
   
-  func saveConversion(_ conversion: ConversionHistory) throws {
+  func saveConversion(_ conversion: ConversionHistory) async throws {
     var history = try getHistory()
     history.insert(conversion, at: 0)
     
