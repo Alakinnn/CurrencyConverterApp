@@ -7,7 +7,7 @@
 
 import Foundation
 
-actor ExchangeRateCacheService {
+final class ExchangeRateCacheService {
   private var cache: [CurrencyPair: CachedRate] = [:]
   private let userDefaults: UserDefaults
   private let cacheKey = "exchangeRateCache"
