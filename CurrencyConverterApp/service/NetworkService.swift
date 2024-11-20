@@ -53,7 +53,7 @@ actor NetworkService {
       throw NetworkError.invalidResponse
     }
     
-    let exchangeRate = try JSONDecoder().decode(ExchangeRate.self, from: data)
+    let exchangeRate = try JSONDecoder().decode(ExchangeRateResponse.self, from: data)
     
     // Handle error response
     if exchangeRate.result == "error" {

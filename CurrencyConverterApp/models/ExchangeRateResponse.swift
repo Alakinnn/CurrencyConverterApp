@@ -8,7 +8,7 @@
 import Foundation
 
 // TODO: Change class name to ExchangeRateResponse
-struct ExchangeRate: Codable {
+struct ExchangeRateResponse: Codable {
   let result: String
   let conversionRate: Double?
   let errorType: String?
