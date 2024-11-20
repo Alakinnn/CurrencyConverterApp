@@ -51,42 +51,58 @@ final class CurrencyConverterViewModel {
   
   @MainActor
   func convert() {
+    guard !isLoading else { return }
     guard let amount = Double(fromAmount) else {
       error = "Please enter a valid amount"
       return
     }
     
+    isLoading = true
+    error = nil
+    
     Task {
       do {
-        isLoading = true
-        error = nil
-        
+        // Fetch rate
         let rate = try await networkService.fetchExchangeRate(
           from: fromCurrency,
           to: toCurrency
         )
         
+        guard !Task.isCancelled else { return }
+        
+        // Update UI with results
         currentRate = rate
         let convertedAmount = amount * rate
         toAmount = String(format: "%.2f", convertedAmount)
         
-        let conversion = ConversionHistory(
-          id: UUID(),
-          fromCurrency: fromCurrency,
-          toCurrency: toCurrency,
-          fromAmount: amount,
-          toAmount: convertedAmount,
-          exchangeRate: rate,
-          date: Date()
-        )
-        
-        try persistenceService.saveConversion(conversion)
-        AppState.shared.conversions.insert(conversion, at: 0)
+        Task.detached(priority: .background) {
+          do {
+            let conversion = ConversionHistory(
+              id: UUID(),
+              fromCurrency: self.fromCurrency,
+              toCurrency: self.toCurrency,
+              fromAmount: amount,
+              toAmount: convertedAmount,
+              exchangeRate: rate,
+              date: Date()
+            )
+            
+            try self.persistenceService.saveConversion(conversion)
+            
+            await MainActor.run {
+              AppState.shared.conversions.insert(conversion, at: 0)
+            }
+          } catch {
+            await MainActor.run {
+              self.error = "Failed to save conversion history"
+            }
+          }
+        }
         
       } catch {
         self.error = error.localizedDescription
-        toAmount = ""
-        currentRate = nil
+        self.toAmount = ""
+        self.currentRate = nil
       }
       
       isLoading = false
