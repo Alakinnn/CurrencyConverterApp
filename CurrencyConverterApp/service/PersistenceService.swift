@@ -7,14 +7,18 @@
 
 import Foundation
 
-class PersistenceService {
+final class PersistenceService {
   private let userDefaults: UserDefaults
+  private let lock = NSLock()
   
   init(userDefaults: UserDefaults = .standard) {
     self.userDefaults = userDefaults
   }
   
   func saveConversion(_ conversion: ConversionHistory) throws {
+    lock.lock()
+    defer { lock.unlock() }
+    
     var history = try getHistory()
     history.insert(conversion, at: 0)
     
@@ -27,6 +31,9 @@ class PersistenceService {
   }
   
   func getHistory() throws -> [ConversionHistory] {
+    lock.lock()
+    defer { lock.unlock() }
+    
     guard let data = userDefaults.data(forKey: Constants.historyKey) else {
       return []
     }
@@ -34,6 +41,9 @@ class PersistenceService {
   }
   
   func clearHistory() {
+    lock.lock()
+    defer { lock.unlock() }
+    
     userDefaults.removeObject(forKey: Constants.historyKey)
   }
 }
