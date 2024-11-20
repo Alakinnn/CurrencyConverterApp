@@ -38,7 +38,7 @@ struct HistoryView: View {
         Button("Clear") {
           appState.conversions.removeAll()
           Task {
-            PersistenceService().clearHistory()
+            await PersistenceService().clearHistory()
           }
         }
       }

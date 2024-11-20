@@ -13,21 +13,30 @@ import Observation
   var conversions: [ConversionHistory] = []
   
   static let shared = AppState()
-
+  private let persistenceService = PersistenceService()
+  
   private init() {
-    loadPersistedHistory()
-  }
-    
-  private func loadPersistedHistory() {
     Task {
-      do {
-        let persistedConversions = try PersistenceService().getHistory()
-        // Ensure UI updates happen on the main thread
-        await MainActor.run {
-          self.conversions = persistedConversions
-        }
-      } catch {
-        print("Failed to load conversion history: \(error.localizedDescription)")
-      }
-    }}
+      await loadConversions()
+    }
+  }
+  
+  private func loadConversions() async {
+    do {
+      self.conversions = try await persistenceService.getHistory()
+    } catch {
+      print("Failed to load conversion history: \(error.localizedDescription)")
+    }
+  }
+  
+  @MainActor
+  func addConversion(_ conversion: ConversionHistory) async {
+    do {
+      conversions.insert(conversion, at: 0)
+      try await persistenceService.saveConversion(conversion)
+    } catch {
+      conversions.removeFirst()
+      print("Failed to save conversion: \(error.localizedDescription)")
+    }
+  }
 }

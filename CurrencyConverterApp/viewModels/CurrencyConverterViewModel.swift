@@ -67,37 +67,24 @@ final class CurrencyConverterViewModel {
           from: fromCurrency,
           to: toCurrency
         )
-        
-        guard !Task.isCancelled else { return }
-        
+                
         // Update UI with results
         currentRate = rate
         let convertedAmount = amount * rate
         toAmount = String(format: "%.2f", convertedAmount)
         
-        Task.detached(priority: .background) {
-          do {
-            let conversion = ConversionHistory(
-              id: UUID(),
-              fromCurrency: self.fromCurrency,
-              toCurrency: self.toCurrency,
-              fromAmount: amount,
-              toAmount: convertedAmount,
-              exchangeRate: rate,
-              date: Date()
-            )
-            
-            try self.persistenceService.saveConversion(conversion)
-            
-            await MainActor.run {
-              AppState.shared.conversions.insert(conversion, at: 0)
-            }
-          } catch {
-            await MainActor.run {
-              self.error = "Failed to save conversion history"
-            }
-          }
-        }
+        // Create and save conversion history
+        let conversion = ConversionHistory(
+          id: UUID(),
+          fromCurrency: fromCurrency,
+          toCurrency: toCurrency,
+          fromAmount: amount,
+          toAmount: convertedAmount,
+          exchangeRate: rate,
+          date: Date()
+        )
+        
+        await AppState.shared.addConversion(conversion)
         
       } catch {
         self.error = error.localizedDescription
