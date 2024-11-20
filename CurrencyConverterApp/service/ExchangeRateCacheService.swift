@@ -11,6 +11,7 @@ final class ExchangeRateCacheService {
   private var cache: [CurrencyPair: CachedRate] = [:]
   private let userDefaults: UserDefaults
   private let cacheKey = "exchangeRateCache"
+  private let lock = NSLock()
   
   init(userDefaults: UserDefaults = .standard) {
     self.userDefaults = userDefaults
@@ -28,6 +29,9 @@ final class ExchangeRateCacheService {
   }
   
   func getRate(from: Currency, to: Currency) -> Double? {
+    lock.lock()
+    defer { lock.unlock() }
+    
     let key = CurrencyPair(fromCurrency: from, toCurrency: to)
     guard let cachedRate = cache[key], !cachedRate.isExpired else {
       return nil
@@ -36,6 +40,9 @@ final class ExchangeRateCacheService {
   }
   
   func saveRate(from: Currency, to: Currency, rate: Double) {
+    lock.lock()
+    defer { lock.unlock() }
+    
     let key = CurrencyPair(fromCurrency: from, toCurrency: to)
     let reverseKey = CurrencyPair(fromCurrency: to, toCurrency: from)
     
@@ -47,6 +54,9 @@ final class ExchangeRateCacheService {
   }
   
   func clearCache() {
+    lock.lock()
+    defer { lock.unlock() }
+    
     cache.removeAll()
     userDefaults.removeObject(forKey: cacheKey)
   }
