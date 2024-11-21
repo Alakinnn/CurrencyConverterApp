@@ -36,7 +36,8 @@ CCA is a simple currency conversion application built in Swift. It utilizes API 
 ### Problem 2.1
   - Modify test cases as needed in the setup method
   - Run the test case file
-  Added terminal UI for better visualization.
+  
+  Extra: Added terminal UI for better visualization.
 
 ### Problem 2.2
   - Modify test cases as needed in each testing function
