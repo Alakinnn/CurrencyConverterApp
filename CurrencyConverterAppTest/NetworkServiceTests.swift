@@ -71,6 +71,7 @@ final class NetworkServiceTests: XCTestCase {
   
   func testFetchExchangeRate_Success() async throws {
     // Given
+    // Change rate as needed
     let expectedRate = 1.23
     let mockResponse = """
         {
