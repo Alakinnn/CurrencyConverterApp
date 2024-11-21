@@ -19,6 +19,19 @@ struct CurrencyConverterView: View {
         )
         
         VStack(spacing: 20) {
+          if let error = vm.error {
+            Text(error)
+              .foregroundColor(.white)
+              .padding()
+              .background(Color.red.opacity(0.6))
+              .cornerRadius(Constants.Layout.cornerRadius)
+          }
+                              
+          if vm.isLoading {
+            ProgressView()
+              .tint(.white)
+          }
+          
           currencySection(
             amount: vm.fromAmount,
             currency: $vm.fromCurrency,
