@@ -6,87 +6,105 @@
 //
 
 import SwiftUI
+
 struct CurrencyConverterView: View {
   @State var vm: CurrencyConverterViewModel
   
   var body: some View {
-    VStack(spacing: 0) {
-      ZStack {
-        LinearGradient(
-          gradient: Gradient(colors: [.mint.opacity(0.8), .cyan.opacity(0.6)]),
-          startPoint: .topLeading,
-          endPoint: .bottomTrailing
-        )
+    ZStack {
+      VStack(spacing: 0) {
+        ZStack {
+          LinearGradient(
+            gradient: Gradient(colors: [.mint.opacity(0.8), .cyan.opacity(0.6)]),
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+          )
+          
+          VStack(spacing: 20) {
+            currencySection(
+              amount: vm.fromAmount,
+              currency: $vm.fromCurrency,
+              onCurrencyChange: { _ in vm.convert() }
+            )
+            
+            HStack {
+              Button {
+                vm.swapCurrencies()
+              } label: {
+                Image(systemName: "arrow.up.arrow.down")
+                  .font(.title2)
+                  .foregroundColor(.white)
+              }
+              
+              if let rate = vm.currentRate {
+                Text("1 \(vm.fromCurrency.rawValue) = \(rate.formattedRate()) \(vm.toCurrency.rawValue)")
+                  .font(.caption)
+                  .foregroundColor(.white)
+              }
+            }
+            
+            currencySection(
+              amount: vm.toAmount,
+              currency: $vm.toCurrency,
+              isEditable: false,
+              onCurrencyChange: { _ in vm.convert() }
+            )
+            
+            Button {
+              vm.convert()
+            } label: {
+              Text("Convert")
+                .font(.headline)
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.blue.opacity(0.3))
+                .cornerRadius(Constants.Layout.cornerRadius)
+            }
+          }
+          .padding()
+        }
+        .ignoresSafeArea()
         
-        VStack(spacing: 20) {
-          if let error = vm.error {
+        numberPad
+          .padding()
+      }
+      
+      // Overlays
+      ZStack {
+        if vm.isLoading {          
+          ProgressView()
+            .tint(.white)
+            .scaleEffect(1.5)
+        }
+        
+        if let error = vm.error {
+          VStack {
+            Spacer().frame(height: 60)
+            
             Text(error)
               .foregroundColor(.white)
               .padding()
-              .background(Color.red.opacity(0.6))
+              .background(Color.red.opacity(0.8))
               .cornerRadius(Constants.Layout.cornerRadius)
-          }
-                              
-          if vm.isLoading {
-            ProgressView()
-              .tint(.white)
-          }
-          
-          currencySection(
-            amount: vm.fromAmount,
-            currency: $vm.fromCurrency,
-            onCurrencyChange: { _ in vm.convert() }
-          )
-          
-          HStack {
-            Button {
-              vm.swapCurrencies()
-            } label: {
-              Image(systemName: "arrow.up.arrow.down")
-                .font(.title2)
-                .foregroundColor(.white)
-            }
+              .shadow(radius: 5)
+              .padding(.horizontal)
             
-            if let rate = vm.currentRate {
-              Text("1 \(vm.fromCurrency.rawValue) = \(String(format: "%.4f", rate)) \(vm.toCurrency.rawValue)")
-                .font(.caption)
-                .foregroundColor(.white)
-            }
+            Spacer()
           }
-          
-          currencySection(
-            amount: vm.toAmount,
-            currency: $vm.toCurrency,
-            isEditable: false,
-            onCurrencyChange: { _ in vm.convert() }
-          )
-          
-          Button {
-            vm.convert()
-          } label: {
-            Text("Convert")
-              .font(.headline)
-              .foregroundColor(.white)
-              .frame(maxWidth: .infinity)
-              .padding()
-              .background(Color.blue.opacity(0.3))
-              .cornerRadius(Constants.Layout.cornerRadius)
-          }
+          .transition(.move(edge: .top).combined(with: .opacity))
         }
-        .padding()
       }
-      .ignoresSafeArea()
-      
-      numberPad
-        .padding()
+      .animation(.easeInOut, value: vm.error)
+      .animation(.easeInOut, value: vm.isLoading)
     }
   }
   
   private func currencySection(
-      amount: String,
-      currency: Binding<Currency>,
-      isEditable: Bool = true,
-      onCurrencyChange: @escaping (Currency) -> Void = { _ in }
+    amount: String,
+    currency: Binding<Currency>,
+    isEditable: Bool = true,
+    onCurrencyChange: @escaping (Currency) -> Void = { _ in }
   ) -> some View {
     VStack(alignment: .trailing, spacing: 8) {
       Menu {
