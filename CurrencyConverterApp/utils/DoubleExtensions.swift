@@ -8,7 +8,11 @@
 import Foundation
 
 extension Double {
-  func formatted(decimals: Int = 2) -> String {
+  func formattedPrice(decimals: Int = 2) -> String {
+    String(format: "%.\(decimals)f", self)
+  }
+  
+  func formattedRate(decimals: Int = 6) -> String {
     String(format: "%.\(decimals)f", self)
   }
 }
