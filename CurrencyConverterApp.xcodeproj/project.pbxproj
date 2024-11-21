@@ -111,7 +111,7 @@
 			isa = PBXGroup;
 			children = (
 				644263F32CEA4AEE00041E0C /* CurrencyConverterApp */,
-				646461B52CEB0F11005E157F /* NetworkServiceTests */,
+				646461B52CEB0F11005E157F /* CurrencyConverterAppTest */,
 				644263F22CEA4AEE00041E0C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -150,12 +150,12 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		646461B52CEB0F11005E157F /* NetworkServiceTests */ = {
+		646461B52CEB0F11005E157F /* CurrencyConverterAppTest */ = {
 			isa = PBXGroup;
 			children = (
 				646461B62CEB0F11005E157F /* NetworkServiceTests.swift */,
 			);
-			path = NetworkServiceTests;
+			path = CurrencyConverterAppTest;
 			sourceTree = "<group>";
 		};
 		646461BF2CEB1C5D005E157F /* views */ = {
