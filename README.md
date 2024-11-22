@@ -20,6 +20,8 @@ CCA is a simple currency conversion application built in Swift. It utilizes API 
 
 ## How to run
   - Clone this repository https://github.com/Alakinnn/CurrencyConverterApp.git
+  - Change directory into where it was cloned
+  - Open "CurrencyConverterApp.xcodeproj"
   - Build the application in XCode with version 15.4 or higher
 
 ## Challenges
@@ -34,12 +36,20 @@ CCA is a simple currency conversion application built in Swift. It utilizes API 
   - Device Tested: Iphone 15 Pro
 
 ### Problem 2.1
+  - Clone this repository https://github.com/Alakinnn/CurrencyConverterApp.git - Optional if you have cloned this previously
+  - Change directory into where it was cloned
+  - Open SubProblem1.xcodeproj
   - Modify test cases as needed in the setup method
   - Run the test case file
   
-  Extra: Added terminal UI for better visualization.
+
+### Features
+  - Added terminal UI for better visualization.
 
 ### Problem 2.2
+  - Clone this repository https://github.com/Alakinnn/CurrencyConverterApp.git - Optional if you have cloned this previously
+  - Change directory into where it was cloned
+  - Open SubProblem2.xcodeproj
   - Modify test cases as needed in each testing function
   - Run the test case file
 
